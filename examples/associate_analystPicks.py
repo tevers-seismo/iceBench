@@ -15,7 +15,7 @@ automatic picks produced by run_benchmark().
 Input: a directory of manual analyst picks (read with load_manual_picks).
 Output: PyOcto associations for the analyst picks, for inspecting parameter choices.
 """
-
+import os
 import yaml
 import pandas as pd
 import iceBench
@@ -84,8 +84,34 @@ with open(f"association_params_{stamp}.yaml", "w") as f:
         sort_keys=False,
     )
 
-# 9. Save to NonLinLoc .obs file 
-obs_path = f"/path/to/NLLoc/obs/Analyst.obs"
-assignments["station"] = assignments["station"].str.split(".").str[1]
-#XXX: Specify pick_std (pick uncertainty) in seconds, e.g. 0.05s
-associator.to_nonlinloc(assignments, obs_path, pick_std=0.05) 
+# 9. Save to NonLinLoc .obs file
+#    NOTE: this writes ALL analyst picks to .obs, one file per event, straight from
+#    the analyst catalog — association is NOT applied here. The association above is
+#    only for tuning PyOcto settings; the manual catalog already defines which picks
+#    belong to which event, so NLLoc gets the full, trusted analyst pick set.
+def write_nlloc_obs(cat,nlloc_dir_obs,default_sigma = 0.02):
+    """Write each event of a catalog to its own NonLinLoc .obs phase file.
+
+    INPUT:
+        cat:           obspy Catalog, events whose picks to export
+        nlloc_dir_obs: str, output directory for the .obs files (must exist)
+        default_sigma: is only fetched if picks have no specified uncertainty window
+
+    OUTPUT:
+        None (writes one <event_key>.obs file per event)
+    """
+       
+    for ev in cat:
+        for pick in ev.picks:
+            te = pick.time_errors
+            if (te.lower_uncertainty is None or te.upper_uncertainty is None) \
+                    and te.uncertainty is None:
+                te.uncertainty = default_sigma   
+
+        key = ev.resource_id.id.split("/")[-1]
+        ev.write(os.path.join(nlloc_dir_obs,f"{key}.obs"),format="NLLOC_OBS")
+    return None
+
+obs_path = "/path/to/NLLoc/obs"
+os.makedirs(obs_path, exist_ok=True)
+write_nlloc_obs(analyst_cat,nlloc_dir_obs=obs_path)
