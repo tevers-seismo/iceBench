@@ -6,7 +6,7 @@ It was developed for the MSc thesis *Icequake Detection and Location with Deep-L
 
 ## What it does
 
-Icequakes contain most of their energy at frequencies above 50 Hz. The pretrained pickers in SeisBench operate at 100 Hz, so their internal resampling removes exactly this content. iceBench therefore offers a rescaling of the input data, following the idea of Shi et al. (2024).
+Icequakes are characterised by high frequencies, often well above 50 Hz. The pretrained pickers in SeisBench operate at 100 Hz, so their internal resampling removes exactly this content. iceBench therefore offers a rescaling of the input data, following the idea of Shi et al. (2024).
 
 The library covers:
 
@@ -63,7 +63,7 @@ The three final picking setups of the thesis (all with rescaling):
 | Model | Weight set | P threshold | S threshold | Overlap | Stacking |
 |---|---|---|---|---|---|
 | PhaseNet | VCSEIS (`volpick`) | 0.276 | 0.224 | 0.9 | avg | transformed |
-| PhaseNet | original | 0.412 | 0.182 | 0.9 | avg| transformed |
+| PhaseNet | original weights (`original`)| 0.412 | 0.182 | 0.9 | avg| transformed |
 | EQTransformer | VCSEIS (`volpick`) | 0.312 | 0.158 | 0.5 | max | transformed |
 
 PhaseNet with the VCSEIS weights is the recommended setup.
