@@ -28,8 +28,6 @@ The origin must match the TRANS line used to build the NLLoc grids ( in nlloc_ma
 import numpy as np
 import pyproj
 import pandas as pd
-import matplotlib.pyplot as plt
-from scipy.stats import gaussian_kde
 
 
 # frozen SDC origin for all NLLoc grids: TRANS SDC <lat> <lon> 0
