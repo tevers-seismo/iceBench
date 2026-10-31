@@ -6,13 +6,13 @@ It was developed for the MSc thesis *Icequake Detection and Location with Deep-L
 
 ## What it does
 
-Icequakes contain most of their energy at frequencies above 50 Hz. The pretrained pickers in SeisBench operate at 100 Hz, so their internal resampling removes exactly this content. iceBench therefore offers the possibility for a **rescaling** of the input data: The rescaling idea follows Shi et al. (2024).
+Icequakes contain most of their energy at frequencies above 50 Hz. The pretrained pickers in SeisBench operate at 100 Hz, so their internal resampling removes exactly this content. iceBench therefore offers a rescaling of the input data, following the idea of Shi et al. (2024).
 
 The library covers:
 
 - **Rescaling** of waveforms for any pretrained SeisBench picker, with correct back-transformation of the pick times (per trace, including blinding).
 - **Benchmarking** of model configurations (model × weight set × overlap × stacking × rescaling) and thresholds against a reference catalogue.
-- **Continuous picking** of long data periods in chunks, with output as pick Parquet.
+- **Continuous picking** of long data periods in chunks, with output as pick Parquet files.
 - **Association** of the picks into events with [PyOcto](https://github.com/yetinam/pyocto).
 - **NonLinLoc** control files used for the probabilistic hypocentre inversion. NonLinLoc is not a Python package and has to be installed separately:  [NonLinLoc](https://github.com/ut-beg-texnet/NonLinLoc)
 - **Coordinate conversion** of NonLinLoc locations from the local Cartesian frame to latitude/longitude.
@@ -32,7 +32,7 @@ Runs are configured with a YAML file (see `examples/run_config_example.yaml`). E
 | Association of automatic picks from continuous run | `examples/associate_autoPicks_continous.py` |
 | PyOcto parameters used in the thesis | `examples/associator_config.py` |
 | Hypocentre inversion with NonLinLoc | `examples/NLLoc/` |
-| Obspyck control files for manual picking | `examples/obspyck/` |
+| ObsPyck control files for manual picking | `examples/obspyck/` |
  
 
 ## Repository structure
@@ -52,7 +52,7 @@ icebench/            library code
   plot.py            plotting helpers
 examples/
   NLLoc/             NonLinLoc control files and file generation, coordinate transformation
-  obspyck/           Obspyck control files 
+  obspyck/           ObsPyck control files 
   ...
 ```
 
@@ -66,5 +66,4 @@ The three final picking setups of the thesis (all with rescaling):
 | PhaseNet | original | 0.412 | 0.182 | 0.9 | avg| transformed |
 | EQTransformer | VCSEIS (`volpick`) | 0.312 | 0.158 | 0.5 | max | transformed |
 
-PhaseNet with the VCSEIS weights is the recommended setup. 
-
+PhaseNet with the VCSEIS weights is the recommended setup.
