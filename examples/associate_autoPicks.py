@@ -86,3 +86,9 @@ print(f"Association Start: {t_start} | End: {t_end} | Duration: {t_end - t_start
 # 8 . Example for how to read in the results
 # events = iceBench.read_association_results(run_dir, kind="events", gid=gid)
 # assignments = iceBench.read_association_results(run_dir, kind="assignments", gid=gid)
+
+# 9. Save to NonLinLoc .obs file 
+obs_path = f"/path/to/NLLoc/obs/{gid}.obs"
+assignments["station"] = assignments["station"].str.split(".").str[1]
+#XXX: Specify pick_std (pick uncertainty) in seconds, e.g. 0.05s
+associator.to_nonlinloc(assignments, obs_path, pick_std=0.05) 

@@ -83,3 +83,9 @@ with open(f"association_params_{stamp}.yaml", "w") as f:
         f,
         sort_keys=False,
     )
+
+# 9. Save to NonLinLoc .obs file 
+obs_path = f"/path/to/NLLoc/obs/Analyst.obs"
+assignments["station"] = assignments["station"].str.split(".").str[1]
+#XXX: Specify pick_std (pick uncertainty) in seconds, e.g. 0.05s
+associator.to_nonlinloc(assignments, obs_path, pick_std=0.05) 
