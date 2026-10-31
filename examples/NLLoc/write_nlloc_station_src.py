@@ -22,7 +22,7 @@ from obspy import read_inventory
 # 0. Specify the inventory
 inv = read_inventory("/path/to/inventory.xml")
 
-station_file = "/home/tevers/MTH/MTH2026/MTH_Data/NLLoc/obs/station_coordinates.txt"
+station_file = "/path/to/NLLoc/obs/station_coordinates.txt"
 
 with open(station_file, "w") as out:
     out.write("#GTSRCE  label  type  lat  lon  z_srce  elev\n")
