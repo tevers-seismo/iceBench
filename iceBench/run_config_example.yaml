@@ -1,33 +1,36 @@
+# =============================================================================
+# iceBench run configuration
+#
+# Two run modes read this file:
+#   run_benchmark()   - evaluates the pickers against a catalog of reference picks:
+#                       a window is cut around each event and the auto picks are
+#                       scored against the manual picks. Requires a catalog.
+#   run_continuous()  - runs the pickers over a continuous time range in chunks and
+#                       writes the picks; no reference picks, no scoring.
+#
+# Keys marked "run_benchmark() only" are ignored by run_continuous():
+#   catalog, window_length, window_start_before_eventtime, reference_author, evaluation.
+# =============================================================================
 run:
-  catalog: /home/something # run_benchmark only
-  output_root: /home/tevers/MTH/MTH2026/MTH_Data/iceBench_runs
+  catalog: /path/to/catalog.xml 
+  output_root: /path/to/iceBench_runs
   station_list:
-    ["4D.S01.SW.GP?","4D.S02.SW.GP?","4D.S03.SW.GP?","4D.S04.SW.GP?",
-     "4D.S05.SW.GP?","4D.S06.SW.GP?","4D.S07.SW.GP?","4D.S08.SW.GP?",
-     "4D.S09.SW.GP?","4D.S10.SW.GP?","4D.S11.SW.GP?","4D.S12.SW.GP?",
-     "4D.S13.SW.GP?","4D.S14.SW.GP?","4D.S15.SW.GP?","4D.S16.SW.GP?",
-     "4D.A1P1.SW.GP?","4D.A2P1.SW.GP?","4D.A3P1.SW.GP?",
-     "4D.RC03..EL?","4D.RC04..EL?","4D.RC05..EL?","4D.RC06..DP?",
-     "4D.RC07..DP?","4D.RC08..DP?","4D.RC09..DP?","4D.RC10..DP?"]
-  window_length: 180  # run_benchmark only
-  window_start_before_eventtime: 60 # run_benchmark only
-  reference_author: nrichels     # run_benchmark only -> author of (STA/LTA) reference picks , 'null' if no author is specified
+    ["4D.S01.SW.GP?",...,"4D.S02.SW.GP?"]
+  window_length: 180  # run_benchmark() only
+  window_start_before_eventtime: 60 # run_benchmark() only
+  reference_author: null     # run_benchmark() only -> author whose catalog picks anchor the processing window e.g (STA/LTA) reference picks , 'null' uses the first given pick of each event in the catalog.
   batch_size: 256
-  remove_response: false
-  sampling_rate: 400        # LOWEST raw rate in the network , set 'null' to read from data if unknown: NOT recommended as this will lead to data being downloaded twice, once to read the rate and once to run the models
-
+  remove_response: false    # inv, pre_filt, water_level can be set in run_*(), check out preprocess.py for more data processing options
+  sampling_rate: 400        # set to the lowest raw sampling rate present in your data [Hz]; 'null' reads it from the data if unknown: NOT recommended, as the data is then downloaded twice (once to read the rate, once to run the models)
 grid:
-  models:
+  models: # automatically fetches the specified models and weight sets from SeisBench
     PhaseNet: [original, instance, stead, scedc, volpick]
     EQTransformer: [original, instance, stead]
+    GPD: [...]
   overlap: [0.5, 0.75, 0.9]
   stacking: [avg, max]
-  time_domain: [real, transformed]
+  time_domain: [real, transformed] # 'real': raw waveform, 'transformed': apply implemented rescaling : check out transform.py for more details
 
 thresholds:
   P: {min: 0.005, max: 0.9, n: 40, spacing: log}
   S: {min: 0.005, max: 0.9, n: 40, spacing: log}
-
-evaluation: # run_benchmark only
-  match_tolerance: 0.5        # symmetric window of match_picks [s], for pick residual statistics, independent of the detection window
-  detection_window: [0.5, 0.2]  # detection_stats: seconds early, seconds late, for detection icequake y/n

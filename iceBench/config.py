@@ -70,11 +70,8 @@ class RunConfig:
     sampling_rate: float or None, LOWEST raw rate among the stations. Only used
                    to validate the window length against the transformed domain,
                    the per station rates are always read from the data itself.
-                   None fetches the first segment to determine it
-    match_tolerance: float, symmetric matching window of match_picks in seconds
-    detection_window: tuple (lower, upper), asymmetric window of detection_stats,
-                      lower seconds early to upper seconds late
-    """
+                   None fetches the first segment to determine it"""
+
     catalog: str
     station_list: list
     output_root: str
@@ -87,8 +84,6 @@ class RunConfig:
     batch_size: int = 256
     remove_response: bool = False
     sampling_rate: float = None
-    match_tolerance: float = 0.5
-    detection_window: tuple = (0.5, 0.2)
     raw: dict = field(default_factory=dict)
 
 
@@ -174,8 +169,5 @@ def load_config(path):
         batch_size=run.get("batch_size", 256),
         remove_response=run.get("remove_response", False),
         sampling_rate=run.get("sampling_rate"),
-        match_tolerance=raw.get("evaluation", {}).get("match_tolerance", 0.5),
-        detection_window=tuple(raw.get("evaluation", {})
-                               .get("detection_window", (0.5, 0.2))),
         raw=raw,
     )
