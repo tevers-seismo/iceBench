@@ -60,10 +60,10 @@ examples/
 
 The three final picking setups of the thesis (all with rescaling):
 
-| Model | Weight set | P threshold | S threshold | Overlap | Stacking |
-|---|---|---|---|---|---|
+| Model | Weight set | P threshold | S threshold | Overlap | Stacking | Rescaling |
+|---|---|---|---|---|---|---|
 | PhaseNet | VCSEIS (`volpick`) | 0.276 | 0.224 | 0.9 | avg | transformed |
-| PhaseNet | original weights (`original`)| 0.412 | 0.182 | 0.9 | avg| transformed |
+| PhaseNet | original weights (`original`) | 0.412 | 0.182 | 0.9 | avg | transformed |
 | EQTransformer | VCSEIS (`volpick`) | 0.312 | 0.158 | 0.5 | max | transformed |
 
 PhaseNet with the VCSEIS weights is the recommended setup.
