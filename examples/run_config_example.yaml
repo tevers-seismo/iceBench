@@ -1,0 +1,36 @@
+# =============================================================================
+# iceBench run configuration
+#
+# Two run modes read this file:
+#   run_benchmark()   - cuts a window around each event in a catalog and runs the
+#                       pickers on it. Requires a catalog of reference picks (used to
+#                       define the windows). Scoring is evaluated in a second step.
+#   run_continuous()  - runs the pickers over a continuous time range in chunks and
+#                       writes the picks; no reference picks, no scoring.
+#
+# Keys marked "run_benchmark() only" are ignored by run_continuous():
+#   catalog, window_length, window_start_before_eventtime, reference_author
+# =============================================================================
+run:
+  catalog: /path/to/catalog.xml 
+  output_root: /path/to/iceBench_runs
+  station_list:
+    ["4D.S01.SW.GP?",...,"4D.S02.SW.GP?"]
+  window_length: 180  # run_benchmark() only
+  window_start_before_eventtime: 60 # run_benchmark() only
+  reference_author: null     # run_benchmark() only -> author whose catalog picks anchor the processing window e.g (STA/LTA) reference picks , 'null' uses the first given pick of each event in the catalog.
+  batch_size: 256
+  remove_response: false    # inv, pre_filt, water_level can be set in run_*(), check out preprocess.py for more data processing options
+  sampling_rate: 400        # set to the lowest raw sampling rate present in your data [Hz]; 'null' reads it from the data if unknown: NOT recommended, as the data is then downloaded twice (once to read the rate, once to run the models)
+grid:
+  models: # automatically fetches the specified models and weight sets from SeisBench
+    PhaseNet: [original, instance, stead, scedc, volpick]
+    EQTransformer: [original, instance, stead]
+    GPD: [...]
+  overlap: [0.5, 0.75, 0.9]
+  stacking: [avg, max]
+  time_domain: [real, transformed] # 'real': raw waveform, 'transformed': apply implemented rescaling : check out transform.py for more details
+
+thresholds:
+  P: {min: 0.005, max: 0.9, n: 40, spacing: log}
+  S: {min: 0.005, max: 0.9, n: 40, spacing: log}
