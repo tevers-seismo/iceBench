@@ -47,7 +47,7 @@ def associate_picks(picks, associator, stations):
 
     return associator.associate(pick_df, stations)
 
-#XXX: TB ASSESSED
+
 def associate_segment(picks, associator, stations, thresholds=None):
     """
     Associate every (grid_id, threshold) combination of one segment.
@@ -98,3 +98,16 @@ def build_associator(params, velocity):
     return pyocto.OctoAssociator.from_area(
         velocity_model=pyocto.VelocityModel0D(**velocity), **params
     )
+
+def read_association_results(run_dir: str, kind: str, gid: str):
+    """Read one grid point's parquet table from a run directory.
+
+    INPUT:
+        run_dir: str, path to the run directory created by run_benchmark()
+        kind:    str, subfolder / table type, e.g. "picks" or "assignments"
+        gid:     str, grid_id whose file to read (filename without .parquet),
+                 e.g. "phasenet_original_ov075_avg_trans"
+    OUTPUT:
+        pd.DataFrame, the contents of <run_dir>/<kind>/<gid>.parquet
+    """
+    return pd.read_parquet(str(run_dir + "/" + kind + "/" + gid + ".parquet"))  # <run_dir>/<kind>/<gid>.parquet

@@ -1,20 +1,27 @@
 """
 iceBench — evaluation example 2: pick residuals against manual analyst picks
 =============================================================================
-In iceBench, creating picks and evaluating them are separate steps:
+In iceBench, creating picks, associating them and evaluating them are separate
+steps:
   run_benchmark() / run_continuous()  - create picks (see run_benchmark_example.py).
+  association (associate example 2)   - group picks into events (writes assignments).
   evaluation (this script)            - score those picks.
 
 This is evaluation example 2. It compares the ASSOCIATED auto picks against the
 manual analyst picks: each manual pick is matched to the closest auto pick on the
 same station within a tolerance, and pick residuals (t_manual - t_auto) are
-summarised per grid point, threshold and phase. Requires association to have been
-run first (it reads kind="assignments", not raw picks).
+summarised per grid point, threshold and phase.
+
+RUN ORDER — association must be run first:
+  run_benchmark_example.py   -> creates the picks
+  associate_example2.py      -> creates the assignments (associated auto picks)
+  THIS script                -> reads kind="assignments" and scores residuals
 
 Evaluation example 1 (separate file) instead compares auto picks against the
-STA/LTA reference events and reports detection/recall only; no association needed.
+STA/LTA reference events and reports detection/recall only;
 
-Input: a run directory produced by run_benchmark() with association applied.
+Input: a run directory produced by run_benchmark() with association applied
+       (associate example 2), plus the manual analyst picks.
 """
 
 import os
@@ -47,6 +54,6 @@ matched.to_parquet(
 
 # 6. Step: Calculate residual statistics for the matched picks
 df_stats = iceBench.residual_stats(matched = matched,by=("grid_id", "threshold", "phase"))
-#XXX: Do what you wish with the df_stats, e.g. save to parquet or csv,...
+# XXX: Do what you wish with the df_stats, e.g. save to parquet or csv,...
 
 print("Done.")
