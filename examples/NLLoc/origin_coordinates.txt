@@ -1,0 +1,3 @@
+# frozen SDC origin for all NLLoc grids: TRANS SDC <lat> <lon> 0
+# Station, lat, lon
+QGISgrid 45.9243 7.8341 

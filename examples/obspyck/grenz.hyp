@@ -1,0 +1,23 @@
+* Longitude East is minus!!
+* Lat/Lon: Integer degrees, decimal minutes
+* If lat/lon is negative, also specify decimal minutes as negative!
+*
+* sets up multiple crustal models using individual delay files.
+* execute these commands after the sta command to get delays properly.
+*
+*set alternate stations (east side of san andreas) for bear valley & loma prieta
+* default northern california gradient model
+*
+* 'crh' lines define the models:
+* crh <model number> <model file name>
+*
+* 'nod' names define the circles for using the models
+* nod <latitude integer degrees> <latitude decimal minutes> <longitude integer degrees> <longitude decimal minutes> <radius in km for full weighting> <radius in km additional to inner circle for mixed weighting> <model number to use>
+*
+* 'mul' line to state a mixed model defaulting to model number 1 if not matching any 'nod' circles
+* mul t 1
+*
+*
+crh 1 'grenz.crh'
+mul t 1
+*
